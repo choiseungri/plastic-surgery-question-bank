@@ -258,6 +258,14 @@ function initControls(){
     btn.textContent = state.wrongOnly ? '오답만 보기 해제' : '오답만 보기';
     applyFilter();
   });
+  document.getElementById('showAnswers')?.addEventListener('click', () => {
+    document.querySelectorAll('.question-card').forEach(card => {
+      const qnum = Number(card.dataset.q);
+      setResponse(qnum, { revealed: true, explanationOpen: false });
+      renderCardState(card);
+    });
+    updateStats();
+  });
   document.getElementById('showAll')?.addEventListener('click', () => {
     document.querySelectorAll('.question-card').forEach(card => {
       const qnum = Number(card.dataset.q);
