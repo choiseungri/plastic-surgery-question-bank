@@ -9,8 +9,158 @@ const state = {
   responses: {}
 };
 
+const UNIQUE_BANK = 'UNIQUE';
+
 function escapeHtml(value){
   return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function normalizeForUnique(value){
+  return String(value ?? '')
+    .normalize('NFKC')
+    .replace(/\s+/g, '')
+    .replace(/[.,;:()[\]{}·ㆍ\-–—_]/g, '')
+    .toLowerCase();
+}
+function promptKey(q){
+  return normalizeForUnique(q.prompt);
+}
+function optionSignature(q){
+  return (q.options || []).map(o => normalizeForUnique(o.text)).join('|');
+}
+function answerIndexSignature(q){
+  return (q.answer || []).join('|');
+}
+function answerValueSignature(q){
+  return (q.answer || [])
+    .map(n => normalizeForUnique(q.options?.[n - 1]?.text || ''))
+    .sort()
+    .join('|');
+}
+function answerValueSet(q){
+  return new Set(
+    (q.answer || [])
+      .map(n => normalizeForUnique(q.options?.[n - 1]?.text || ''))
+      .filter(Boolean)
+  );
+}
+function answersOverlap(a, b){
+  const aValues = answerValueSet(a.q);
+  const bValues = answerValueSet(b.q);
+  if(!aValues.size || !bValues.size) return answerIndexSignature(a.q) === answerIndexSignature(b.q);
+  return [...aValues].some(value => bValues.has(value));
+}
+function splitByAnswerOverlap(group){
+  if(group.length < 2) return [group];
+  const parent = group.map((_, idx) => idx);
+  const find = idx => parent[idx] === idx ? idx : (parent[idx] = find(parent[idx]));
+  const union = (a, b) => {
+    const rootA = find(a);
+    const rootB = find(b);
+    if(rootA !== rootB) parent[rootB] = rootA;
+  };
+  for(let i = 0; i < group.length; i++){
+    for(let j = i + 1; j < group.length; j++){
+      if(answersOverlap(group[i], group[j])) union(i, j);
+    }
+  }
+  const parts = new Map();
+  group.forEach((item, idx) => {
+    const root = find(idx);
+    if(!parts.has(root)) parts.set(root, []);
+    parts.get(root).push(item);
+  });
+  return [...parts.values()];
+}
+function sourceRef(item){
+  return `${item.bank}-${String(item.q.num).padStart(2, '0')}`;
+}
+function uniqueBy(values, keyFn){
+  const seen = new Set();
+  return values.filter(value => {
+    const key = keyFn(value);
+    if(seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+function cloneQuestion(q){
+  return {
+    ...q,
+    options: (q.options || []).map(o => ({ ...o })),
+    answer: [...(q.answer || [])],
+    explanations: (q.explanations || []).map(e => ({ ...e })),
+    images: [...(q.images || [])]
+  };
+}
+function buildUniqueQuestion(group, num, samePromptOtherRefs = []){
+  const representative = group[0];
+  const q = cloneQuestion(representative.q);
+  const sourceRefs = group.map(sourceRef);
+  const notes = uniqueBy(
+    group.map(item => item.q.note).filter(Boolean),
+    note => note
+  );
+  const optionSigs = new Set(group.map(item => optionSignature(item.q)));
+  const answerValueSigs = new Set(group.map(item => answerValueSignature(item.q)));
+  const answerIndexSigs = new Set(group.map(item => answerIndexSignature(item.q)));
+  const sourceText = sourceRefs.join(', ');
+
+  q.num = num;
+  q.sourceLabel = sourceRefs.length > 4
+    ? `출처 ${sourceRefs.length}개 · ${sourceRefs.slice(0, 3).join(' · ')} 외`
+    : sourceRefs.join(' · ');
+  q.explanations = uniqueBy(
+    group.flatMap(item => item.q.explanations || []),
+    e => `${e.bank}|${e.page}|${e.src}|${e.extra ? 1 : 0}`
+  ).map(e => ({ ...e }));
+
+  if(optionSigs.size > 1 && answerValueSigs.size === 1){
+    notes.push(`동일 발문 중 보기 구성이 달라진 버전이 있습니다. 정답 문구는 동일합니다. 출처: ${sourceText}.`);
+  } else if(optionSigs.size > 1 && answerIndexSigs.size === 1){
+    notes.push(`동일 발문 중 보기 구성이 달라진 버전이 있습니다. 정답 번호는 같지만 보기 문구가 달라 대표 문항(${sourceRefs[0]}) 기준으로 표시합니다. 출처: ${sourceText}.`);
+  } else if(optionSigs.size > 1){
+    notes.push(`동일 발문 중 보기 또는 정답 구성이 다른 버전이 있어 대표 문항(${sourceRefs[0]}) 기준으로 표시합니다. 출처: ${sourceText}.`);
+  }
+  if(samePromptOtherRefs.length){
+    notes.push(`동일 발문이지만 정답 구성이 다른 버전은 별도 고유문항으로 분리했습니다. 다른 출처: ${samePromptOtherRefs.join(', ')}.`);
+  }
+
+  q.note = notes.join(' ');
+  return q;
+}
+function buildUniqueQuestions(){
+  if(window.BANK_DATA?.[UNIQUE_BANK]) return window.BANK_DATA[UNIQUE_BANK];
+  const groups = new Map();
+  ['A', 'B', 'C', 'D'].forEach(bank => {
+    (window.BANK_DATA?.[bank] || []).forEach(q => {
+      const key = promptKey(q);
+      if(!groups.has(key)) groups.set(key, []);
+      groups.get(key).push({ bank, q });
+    });
+  });
+  const groupedQuestions = [];
+  groups.forEach(promptGroup => {
+    const parts = splitByAnswerOverlap(promptGroup);
+    parts.forEach(part => {
+      const partSet = new Set(part);
+      groupedQuestions.push({
+        group: part,
+        samePromptOtherRefs: parts.length > 1
+          ? promptGroup.filter(item => !partSet.has(item)).map(sourceRef)
+          : []
+      });
+    });
+  });
+  const questions = groupedQuestions.map((item, idx) => buildUniqueQuestion(item.group, idx + 1, item.samePromptOtherRefs));
+  if(window.BANK_DATA) window.BANK_DATA[UNIQUE_BANK] = questions;
+  return questions;
+}
+function getQuestionsForBank(bank){
+  if(bank === UNIQUE_BANK) return buildUniqueQuestions();
+  return (window.BANK_DATA && window.BANK_DATA[bank]) || [];
+}
+function bankLabel(bank){
+  return bank === UNIQUE_BANK ? '고유' : bank;
 }
 function defaultOptionOrder(q){
   return q.options.map((_, idx) => idx);
@@ -103,7 +253,7 @@ function explanationHtml(q){
 function renderBank(bank){
   state.bank = bank;
   const root = document.getElementById('question-root');
-  const questions = (window.BANK_DATA && window.BANK_DATA[bank]) || [];
+  const questions = getQuestionsForBank(bank);
   const renderItems = getRenderItems(bank, questions);
   document.getElementById('countText').textContent = `${questions.length}문항`;
   root.innerHTML = renderItems.map(({ q, optionOrder }) => `
@@ -111,9 +261,9 @@ function renderBank(bank){
       <div class="question-head">
         <div>
           <div class="question-kicker">Question</div>
-          <h2>${bank}-${String(q.num).padStart(2,'0')}</h2>
+          <h2>${bankLabel(bank)}-${String(q.num).padStart(2,'0')}</h2>
         </div>
-        <a class="source-chip" href="#q${q.num}" title="문항 고유 링크">PDF p.${escapeHtml(q.sourcePage)}</a>
+        <a class="source-chip" href="#q${q.num}" title="문항 고유 링크">${escapeHtml(q.sourceLabel || `PDF p.${q.sourcePage}`)}</a>
       </div>
       <div class="question-content">
         <p class="prompt">${escapeHtml(q.prompt)}</p>
@@ -149,7 +299,7 @@ function setExplanationOpen(card, isOpen, persist = true){
 }
 function renderCardState(card){
   const qnum = Number(card.dataset.q);
-  const q = window.BANK_DATA[state.bank].find(item => item.num === qnum);
+  const q = getQuestionsForBank(state.bank).find(item => item.num === qnum);
   const response = getResponse(qnum);
   const chosen = Number(response.chosen);
   const hasChoice = Number.isInteger(chosen) && chosen > 0;
@@ -198,7 +348,7 @@ function restoreRenderedState(){
 function attachChoiceEvents(){
   document.querySelectorAll('.question-card').forEach(card => {
     const qnum = Number(card.dataset.q);
-    const q = window.BANK_DATA[state.bank].find(item => item.num === qnum);
+    const q = getQuestionsForBank(state.bank).find(item => item.num === qnum);
     card.querySelectorAll('.choice').forEach(btn => {
       btn.addEventListener('click', () => {
         const chosen = Number(btn.dataset.choice);
@@ -246,7 +396,7 @@ function initControls(){
   document.getElementById('shuffleToggle')?.addEventListener('click', () => {
     state.shuffleOn = !state.shuffleOn;
     if(state.shuffleOn){
-      const questions = (window.BANK_DATA && window.BANK_DATA[state.bank]) || [];
+      const questions = getQuestionsForBank(state.bank);
       state.shufflePlans[state.bank] = createShufflePlan(questions);
     }
     renderBank(state.bank);
