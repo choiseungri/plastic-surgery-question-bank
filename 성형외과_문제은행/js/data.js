@@ -108,7 +108,7 @@ window.BANK_DATA = {
         }
       ],
       "answer": [
-        1
+        4
       ],
       "sourcePage": 1,
       "explanations": [
@@ -118,7 +118,7 @@ window.BANK_DATA = {
           "src": "assets/explanations/A/p03.jpg"
         }
       ],
-      "note": "",
+      "note": "정답이 수정되었습니다. ④ IMF가 왜곡 (distortion)될 수 있다가 정답입니다.",
       "images": [
         "assets/question_figures/A/q03_01.jpg"
       ]
@@ -1441,7 +1441,7 @@ window.BANK_DATA = {
         }
       ],
       "answer": [
-        5
+        4
       ],
       "sourcePage": 5,
       "explanations": [
@@ -1451,7 +1451,7 @@ window.BANK_DATA = {
           "src": "assets/explanations/A/p26.jpg"
         }
       ],
-      "note": "",
+      "note": "정답이 수정되었습니다. 피판 monitoring 중 가장 신뢰도 높은 것은 US가 아니라 ④ Pinprick test입니다.",
       "images": []
     },
     {
@@ -4152,7 +4152,7 @@ window.BANK_DATA = {
         }
       ],
       "answer": [
-        1
+        4
       ],
       "sourcePage": 1,
       "explanations": [
@@ -4167,7 +4167,7 @@ window.BANK_DATA = {
           "src": "assets/explanations/C/p04.jpg"
         }
       ],
-      "note": "",
+      "note": "정답이 수정되었습니다. ④ IMF가 왜곡 (distortion)될 수 있다가 정답입니다.",
       "images": [
         "assets/question_figures/C/q03_01.jpg"
       ]
@@ -5439,7 +5439,7 @@ window.BANK_DATA = {
         }
       ],
       "answer": [
-        5
+        4
       ],
       "sourcePage": 5,
       "explanations": [
@@ -5449,7 +5449,7 @@ window.BANK_DATA = {
           "src": "assets/explanations/C/p28.jpg"
         }
       ],
-      "note": "",
+      "note": "정답이 수정되었습니다. 피판 monitoring 중 가장 신뢰도 높은 것은 US가 아니라 ④ Pinprick test입니다.",
       "images": []
     },
     {
