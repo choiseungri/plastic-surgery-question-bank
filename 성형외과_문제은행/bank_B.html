@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>문제은행 B · 성형외과학 문제은행</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="bank">
+  <header class="site-header bank-header">
+    <div class="header-shell">
+      <a class="home-link" href="index.html" aria-label="index로 이동">← Index</a>
+      <div class="eyebrow">Plastic Surgery Question Bank</div>
+      <h1>문제은행 B</h1>
+      <p class="subtitle">선택지를 누르면 정답/오답 판정과 해설 이미지가 바로 열립니다. 문항 이미지는 발문 아래에 실제 figure/photo만 표시했습니다.</p>
+      <nav class="nav-tabs" aria-label="문제은행 이동">
+        <a class="tab" href="bank_A.html">A</a>
+        <a class="tab active" href="bank_B.html">B</a>
+        <a class="tab" href="bank_C.html">C</a>
+        <a class="tab" href="bank_D.html">D</a>
+      </nav>
+    </div>
+  </header>
+  <main class="container bank-container">
+    <section class="toolbar" aria-label="문제 조작 도구">
+      <div class="toolbar-card">
+        <div class="toolbar-main">
+          <label class="search-label" for="search">검색</label>
+          <input id="search" class="search" type="search" placeholder="문항번호, 키워드, 보기 검색">
+          <button id="wrongOnly" class="tool-btn" type="button" data-on="0">오답만 보기</button>
+          <button id="showAll" class="tool-btn" type="button">정답/해설 모두 열기</button>
+          <button id="resetAll" class="tool-btn ghost" type="button">초기화</button>
+        </div>
+        <div class="toolbar-status">
+          <span id="countText" class="count-text"></span>
+          <span id="stats" class="stats"></span>
+          <span class="progress-track"><span id="progressBar" class="progress-bar"></span></span>
+        </div>
+      </div>
+    </section>
+    <section id="question-root" class="question-list" aria-live="polite"></section>
+  </main>
+  <div id="imageModal" class="modal" role="dialog" aria-modal="true" aria-label="이미지 크게 보기" hidden>
+    <button class="modal-close" type="button" aria-label="닫기">×</button>
+    <img class="modal-img" alt="확대 이미지">
+  </div>
+  <script>window.CURRENT_BANK = 'B';</script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
