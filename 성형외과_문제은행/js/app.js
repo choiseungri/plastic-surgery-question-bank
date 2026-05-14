@@ -203,7 +203,7 @@ function attachChoiceEvents(){
       btn.addEventListener('click', () => {
         const chosen = Number(btn.dataset.choice);
         const isCorrect = q.answer.includes(chosen);
-        setResponse(qnum, { chosen, correct: isCorrect, revealed: true, explanationOpen: true });
+        setResponse(qnum, { chosen, correct: isCorrect, revealed: true });
         renderCardState(card);
         updateStats();
       });
