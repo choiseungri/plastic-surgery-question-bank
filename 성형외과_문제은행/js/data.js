@@ -7851,7 +7851,7 @@ window.BANK_DATA = {
         }
       ],
       "answer": [
-        2
+        4
       ],
       "sourcePage": 7,
       "explanations": [
@@ -7861,7 +7861,7 @@ window.BANK_DATA = {
           "src": "assets/explanations/D/p27.jpg"
         }
       ],
-      "note": "",
+      "note": "건탁이 피셜 급성구획증후군이라고 하네요 ㅇㅇ",
       "images": []
     },
     {
