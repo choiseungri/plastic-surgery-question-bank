@@ -992,7 +992,6 @@ window.BANK_DATA = {
         }
       ],
       "answer": [
-        2,
         4
       ],
       "sourcePage": 4,
@@ -1009,7 +1008,7 @@ window.BANK_DATA = {
           "extra": true
         }
       ],
-      "note": "해설 파일 간 상충 문항입니다. A 해설 p16은 ② Chest MRI(implant rupture)를, D 해설 p17은 동일 문항에 대해 late seroma 관점에서 ④ Ultrasonography를 제시합니다.",
+      "note": "D 해설 기준으로 정답을 ④ Ultrasonography로 표시합니다. A 해설 p16의 ② Chest MRI(implant rupture)와 다릅니다.",
       "images": []
     },
     {
@@ -1313,7 +1312,6 @@ window.BANK_DATA = {
         }
       ],
       "answer": [
-        3,
         4
       ],
       "sourcePage": 5,
@@ -1330,7 +1328,7 @@ window.BANK_DATA = {
           "extra": true
         }
       ],
-      "note": "해설 파일 간 상충 문항입니다. A 해설 p23은 ③으로 표시하지만, D 해설 p19는 sentinel vein = medial zygomaticotemporal vein으로 보아 ④가 더 타당하다고 정정했습니다.",
+      "note": "D 해설 기준으로 정답을 ④ Medial zygomaticotemporal vein으로 표시합니다. A 해설 p23의 ③ Superficial temporal vein과 다릅니다.",
       "images": [
         "assets/question_figures/A/q33_01.jpg"
       ]
@@ -1613,7 +1611,7 @@ window.BANK_DATA = {
           "extra": true
         }
       ],
-      "note": "A 해설 p29는 보기 해석이 애매하다고 논의하지만, 이후 해설 파일에서는 thick STSG의 모발 재성장 근거로 ⑤를 답으로 표시합니다.",
+      "note": "D 해설 기준으로 정답을 ⑤로 표시합니다. A 해설 p29는 보기 해석이 애매하다고 논의했으나, D 해설 p22는 thick STSG의 모발 재성장 근거로 ⑤를 제시합니다.",
       "images": []
     },
     {
@@ -1653,7 +1651,7 @@ window.BANK_DATA = {
           "src": "assets/explanations/A/p30.jpg"
         }
       ],
-      "note": "해설 파일에서 ④ 종양 깊이와 ⑤ 병변의 침습 깊이를 Breslow thickness/depth of invasion으로 보아 동일 개념에 가깝다고 표시한 애매 문항입니다.",
+      "note": "D 해설 기준으로 ④ 종양 깊이와 ⑤ 병변의 침습 깊이를 Breslow thickness/depth of invasion의 동일 개념으로 보아 ④/⑤를 모두 정답 처리합니다.",
       "images": []
     },
     {
@@ -2451,7 +2449,7 @@ window.BANK_DATA = {
           "src": "assets/explanations/B/p08.jpg"
         }
       ],
-      "note": "해설 주석상 좌측 inferior rectus entrapment 의도로 보이나 보기 오류/해석 문제로 ④도 인정 가능하다고 되어 있어 ④/⑤를 모두 표시했습니다.",
+      "note": "D 기준으로 대조할 동일 문항이 없어 기존 해설 주석에 따라 ④/⑤를 모두 정답 처리합니다. 해설 주석상 좌측 inferior rectus entrapment 의도로 보이나 보기 오류/해석 문제로 ④도 인정 가능하다고 표시되어 있습니다.",
       "images": [
         "assets/question_figures/B/q10_01.jpg"
       ]
@@ -5271,7 +5269,6 @@ window.BANK_DATA = {
         }
       ],
       "answer": [
-        3,
         5
       ],
       "sourcePage": 5,
@@ -5288,7 +5285,7 @@ window.BANK_DATA = {
           "extra": true
         }
       ],
-      "note": "해설 파일 간 상충 문항입니다. C 해설 p23은 ③ Muscle volume을 표시하고, D 해설 p18의 동일 문항은 ⑤ Epidermis thickness를 제시합니다.",
+      "note": "D 해설 기준으로 정답을 ⑤ Epidermis thickness로 표시합니다. C 해설 p23의 ③ Muscle volume과 다릅니다.",
       "images": []
     },
     {
@@ -7031,7 +7028,7 @@ window.BANK_DATA = {
           "src": "assets/explanations/D/p17.jpg"
         }
       ],
-      "note": "D 해설 p17은 이전 조의 MRI/rupture 해석과 달리 late seroma 의심 시 ultrasonography를 우선 검사로 제시합니다.",
+      "note": "D 해설 기준으로 정답을 ④ Ultrasonography로 표시합니다. A 해설 p16의 ② Chest MRI(implant rupture)와 다릅니다.",
       "images": []
     },
     {
@@ -7150,7 +7147,7 @@ window.BANK_DATA = {
           "src": "assets/explanations/D/p18.jpg"
         }
       ],
-      "note": "",
+      "note": "D 해설 기준으로 정답을 ⑤ Epidermis thickness로 표시합니다. C 해설 p23의 ③ Muscle volume과 다릅니다.",
       "images": []
     },
     {
@@ -7189,7 +7186,7 @@ window.BANK_DATA = {
           "src": "assets/explanations/D/p19.jpg"
         }
       ],
-      "note": "",
+      "note": "D 해설 기준으로 정답을 ④ Medial zygomaticotemporal vein으로 표시합니다. A 해설 p23의 ③ Superficial temporal vein과 다릅니다.",
       "images": [
         "assets/question_figures/D/q29_01.jpg"
       ]
@@ -7543,7 +7540,7 @@ window.BANK_DATA = {
           "src": "assets/explanations/D/p23.jpg"
         }
       ],
-      "note": "해설 파일에서 ④ 종양 깊이와 ⑤ 병변의 침습 깊이를 Breslow thickness/depth of invasion으로 보아 동일 개념에 가깝다고 표시한 애매 문항입니다.",
+      "note": "D 해설 기준으로 ④ 종양 깊이와 ⑤ 병변의 침습 깊이를 Breslow thickness/depth of invasion의 동일 개념으로 보아 ④/⑤를 모두 정답 처리합니다.",
       "images": []
     },
     {
